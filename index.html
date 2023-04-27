@@ -1,11 +1,14 @@
 <div id='webcam-container'></div>
 <div id='label-container'></div>
+<span id="fps">--</span> FPS</div>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.3/dist/teachablemachine-image.min.js"></script>
 <script type="text/javascript">
     // More API functions here:
     // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
-
+    var fps = document.getElementById("fps");
+    var startTime = Date.now();
+    var frame = 0;
     // the link to your model provided by Teachable Machine export panel
     const URL = 'https://teachablemachine.withgoogle.com/models/9UUcfiGdl/';
 
@@ -76,6 +79,17 @@
             labelContainer.childNodes[i].innerHTML = classPrediction;
         }
     }
+    function tick() {
+    var time = Date.now();
+    frame++;
+    if (time - startTime > 1000) {
+        fps.innerHTML = (frame / ((time - startTime) / 1000)).toFixed(1);
+        startTime = time;
+        frame = 0;
+        }
+    window.requestAnimationFrame(tick);
+    }
+    tick();
 </script>
 
 
