@@ -60,8 +60,8 @@
     const webCamVideo = document.getElementsByTagName('video')[0];
     webCamVideo.setAttribute('playsinline', true); // written with "setAttribute" bc. iOS buggs otherwise
     webCamVideo.muted = 'true';
-    webCamVideo.style.width = 967 + 'px';
-    webCamVideo.style.height = 1782 + 'px';
+    webCamVideo.style.width = webcamWidth + 'px'; //967
+    webCamVideo.style.height = webcamHeight + 'px'; //1782
   } else {
     document.getElementById('webcam-container').appendChild(webcam.canvas);
   }
