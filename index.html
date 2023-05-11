@@ -1,9 +1,9 @@
+
 <style>
 video {
     object-fit: fill;
 }
 </style>
-
 <div>
     <h1 style=" text-align: center;">E-Cigarette Awareness</h1>
 </div>
@@ -33,8 +33,10 @@ video {
       isIos = true;
     }
     // Load the image model and setup the webcam
-    init();
-    async function init() {
+    
+init();
+
+async function init() {
   const modelURL = URL + 'model.json';
   const metadataURL = URL + 'metadata.json';
 
@@ -49,9 +51,11 @@ video {
   var ratio = window.devicePixelRatio;
   var screenWidth = screen.width * ratio;
   var screenHeight = screen.height * ratio;
-  const webcamWidth = screenWidth;
-  const webcamHeight = screenHeight;
-  webcam = new tmImage.Webcam(webcamWidth, webcamHeight, flip);
+  
+  let stream = await navigator.mediaDevices.getUserMedia({video: true});
+  let {width, height} = stream.getTracks()[0].getSettings();
+  console.log(`${width}x${height}`); // 640x480
+  webcam = new tmImage.Webcam(screenWidth, screenHeight, flip);
   await webcam.setup(); // request access to the webcam
 
   // Set the webcam to full screen
@@ -61,14 +65,15 @@ video {
 //   webcam.canvas.style.bottom = '0';
 //   webcam.canvas.style.right = '0';
 
+
   if (isIos) {
     document.getElementById('webcam-container').appendChild(webcam.webcam); // webcam object needs to be added in any case to make this work on iOS
     // grab video-object in any way you want and set the attributes
     const webCamVideo = document.getElementsByTagName('video')[0];
     webCamVideo.setAttribute('playsinline', true); // written with "setAttribute" bc. iOS buggs otherwise
     webCamVideo.muted = 'true';
-    webCamVideo.style.width = screenWidth + 'px'; //967
-    webCamVideo.style.height = screenHeight + 'px'; //1782
+    webCamVideo.style.width = screenWidth + 'px';
+    webCamVideo.style.height = screenHeight + 'px';
   } else {
     document.getElementById('webcam-container').appendChild(webcam.canvas);
   }
