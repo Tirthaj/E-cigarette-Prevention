@@ -6,7 +6,7 @@ This project is created by;
 # Prajwal Desai G01321938
 
 This project consists of Two parts;
-# 1. Object Detection Part
+# 1. Object Recognition Part
 # 2. Augmented Reality Part
 
 The project works as follows;
@@ -18,6 +18,10 @@ The Link: https://tirthaj.github.io/E-cigarette-Prevention/
 
 # Step 2:
 Give access to all permissions that the web application asks for, i.e. camera access, location access and AR permission access
-After doing that, the camera feed should pop up on your screen and this means that our Object Detection model has started working.
-It keeps scanning for E-cigarettes, and we have kept a 5 second buffer for detection to help organize the process.
+After doing that, the camera feed should pop up on your screen and this means that our Object Recognition model has started working.
+It keeps scanning for E-cigarettes, and we have kept a 5 second buffer for recognition to help organize the process.
+
+#Step 3:
+Once our model recognizes an e-cigarette, then the Augmented Reality part of our code is triggered.
+Depending on which e-cigarette is recognized, a custom Augmented Reality warning message is displayed near you which you can see using the camera.
 
