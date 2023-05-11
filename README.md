@@ -21,7 +21,7 @@ Give access to all permissions that the web application asks for, i.e. camera ac
 After doing that, the camera feed should pop up on your screen and this means that our Object Recognition model has started working.
 It keeps scanning for E-cigarettes, and we have kept a 5 second buffer for recognition to help organize the process.
 
-#Step 3:
+# Step 3:
 Once our model recognizes an e-cigarette, then the Augmented Reality part of our code is triggered.
 Depending on which e-cigarette is recognized, a custom Augmented Reality warning message is displayed near you which you can see using the camera.
 
