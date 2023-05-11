@@ -1,11 +1,18 @@
-<div id='webcam-container'></div>
-<div id='label-container'></div>
+<div>
+    <h1 style=" text-align: center;">E-Cigarette Awareness</h1>
+</div>
 <span id="fps">--</span> FPS</div>
+<div id='webcam-container'>
+</div>
+<div id='label-container'></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.3/dist/teachablemachine-image.min.js"></script>
 <script type="text/javascript">
     // More API functions here:
     // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+    let counter = 0;
+    let maxname = "";
     var fps = document.getElementById("fps");
     var startTime = Date.now();
     var frame = 0;
@@ -22,41 +29,52 @@
     // Load the image model and setup the webcam
     init();
     async function init() {
-        const modelURL = URL + 'model.json';
-        const metadataURL = URL + 'metadata.json';
+  const modelURL = URL + 'model.json';
+  const metadataURL = URL + 'metadata.json';
 
-        // load the model and metadata
-        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
-        // or files from your local hard drive
-        model = await tmImage.load(modelURL, metadataURL);
-        maxPredictions = model.getTotalClasses();
+  // load the model and metadata
+  // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+  // or files from your local hard drive
+  model = await tmImage.load(modelURL, metadataURL);
+  maxPredictions = model.getTotalClasses();
 
-        // Convenience function to setup a webcam
-        const flip = true; // whether to flip the webcam
-        const width = 800;
-        const height = 800;
-        webcam = new tmImage.Webcam(width, height, flip);
-        await webcam.setup(); // request access to the webcam
+  // Convenience function to setup a webcam
+  const flip = true; // whether to flip the webcam
+  const screenWidth = window.screen.width;
+  const screenHeight = window.screen.height;
+  const webcamWidth = screenWidth;
+  const webcamHeight = screenHeight;
+  webcam = new tmImage.Webcam(webcamWidth, webcamHeight, flip);
+  await webcam.setup(); // request access to the webcam
 
-        if (isIos) {
-            document.getElementById('webcam-container').appendChild(webcam.webcam); // webcam object needs to be added in any case to make this work on iOS
-            // grab video-object in any way you want and set the attributes
-            const webCamVideo = document.getElementsByTagName('video')[0];
-            webCamVideo.setAttribute("playsinline", true); // written with "setAttribute" bc. iOS buggs otherwise
-            webCamVideo.muted = "true";
-            webCamVideo.style.width = width + 'px';
-            webCamVideo.style.height = height + 'px';
-        } else {
-            document.getElementById("webcam-container").appendChild(webcam.canvas);
-        }
-        // append elements to the DOM
-        labelContainer = document.getElementById('label-container');
-        for (let i = 0; i < maxPredictions; i++) { // and class labels
-            labelContainer.appendChild(document.createElement('div'));
-        }
-        webcam.play();
-        window.requestAnimationFrame(loop);
-    }
+  // Set the webcam to full screen
+  //webcam.canvas.style.position = 'fixed';
+  webcam.canvas.style.top = '0';
+  webcam.canvas.style.left = '0';
+  webcam.canvas.style.bottom = '0';
+  webcam.canvas.style.right = '0';
+
+  if (isIos) {
+    document.getElementById('webcam-container').appendChild(webcam.webcam); // webcam object needs to be added in any case to make this work on iOS
+    // grab video-object in any way you want and set the attributes
+    const webCamVideo = document.getElementsByTagName('video')[0];
+    webCamVideo.setAttribute('playsinline', true); // written with "setAttribute" bc. iOS buggs otherwise
+    webCamVideo.muted = 'true';
+    webCamVideo.style.width = 967 + 'px';
+    webCamVideo.style.height = 1782 + 'px';
+  } else {
+    document.getElementById('webcam-container').appendChild(webcam.canvas);
+  }
+  // append elements to the DOM
+  labelContainer = document.getElementById('label-container');
+  for (let i = 0; i < maxPredictions; i++) {
+    // and class labels
+    labelContainer.appendChild(document.createElement('div'));
+  }
+  webcam.play();
+  window.requestAnimationFrame(loop);
+}
+
 
     async function loop() {
         webcam.update(); // update the webcam frame
@@ -73,10 +91,43 @@
         } else {
             prediction = await model.predict(webcam.canvas);
         }
+        
         for (let i = 0; i < maxPredictions; i++) {
             const classPrediction =
                 prediction[i].className + ': ' + prediction[i].probability.toFixed(2);
-            labelContainer.childNodes[i].innerHTML = classPrediction;
+                if (prediction[i].probability.toFixed(2) > 0.85){
+                    maxname = prediction[i].className;
+                    console.log(maxname);
+                    counter ++;
+                    console.log("Counter" +counter);
+                    if (counter > 200){
+                        console.log("For long" +maxname)
+                        // Redirect
+                        if (maxname == 'Blank'){
+                            counter = 0;
+                            continue;
+                        }
+                        else if (maxname=='Blume E-Cigarette'){
+                            window.location.href = "https://tirthaj.github.io/E-cigarette-Prevention/Blume_warning.html";
+                        }
+                        else if (maxname=='Swift E-cigarette'){
+                            window.location.href = "https://tirthaj.github.io/E-cigarette-Prevention/Swift_warning.html";
+                        }
+                        else if (maxname=='Diamond E-cigarette'){
+                            window.location.href = "https://tirthaj.github.io/E-cigarette-Prevention/Diamond_warning.html";
+                        }
+                        else if (maxname=='Golden E-cigarette'){
+                            window.location.href = "https://tirthaj.github.io/E-cigarette-Prevention/Lux_warning.html";
+                        }
+                        // window.location.href = "https://tirthaj.github.io/WebAR-TT/";
+                        counter = 0;
+                    }
+                }
+                // else{
+
+                //     counter = 0;
+                // }
+                // console.log(classPrediction);
         }
     }
     function tick() {
@@ -91,5 +142,3 @@
     }
     tick();
 </script>
-
-
