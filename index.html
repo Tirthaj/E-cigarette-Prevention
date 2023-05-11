@@ -41,8 +41,8 @@
   // Convenience function to setup a webcam
   const flip = true; // whether to flip the webcam
   var ratio = window.devicePixelRatio || 1;
-  var screenWidth = screen.width;
-  var screenHeight = screen.height;
+  var screenWidth = screen.width * ratio;
+  var screenHeight = screen.height * ratio;
   const webcamWidth = screenWidth;
   const webcamHeight = screenHeight;
   webcam = new tmImage.Webcam(webcamWidth, webcamHeight, flip);
