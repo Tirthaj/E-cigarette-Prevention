@@ -1,7 +1,10 @@
-
+<html>
 <style>
 video {
     object-fit: fill;
+}
+body {
+    background-color: antiquewhite;
 }
 </style>
 <div>
@@ -15,24 +18,23 @@ video {
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.3/dist/teachablemachine-image.min.js"></script>
 <script type="text/javascript">
-    // More API functions here:
-    // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+    
     let counter = 0;
     let maxname = "";
     var fps = document.getElementById("fps");
     var startTime = Date.now();
     var frame = 0;
-    // the link to your model provided by Teachable Machine export panel
+    
     const URL = 'https://teachablemachine.withgoogle.com/models/9UUcfiGdl/';
 
     let model, webcam, labelContainer, maxPredictions;
 
     let isIos = false;
-    // fix when running demo in ios, video will be frozen;
+    
     if (window.navigator.userAgent.indexOf('iPhone') > -1 || window.navigator.userAgent.indexOf('iPad') > -1) {
       isIos = true;
     }
-    // Load the image model and setup the webcam
+    
     
 init();
 
@@ -40,44 +42,29 @@ async function init() {
   const modelURL = URL + 'model.json';
   const metadataURL = URL + 'metadata.json';
 
-  // load the model and metadata
-  // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
-  // or files from your local hard drive
+ 
   model = await tmImage.load(modelURL, metadataURL);
   maxPredictions = model.getTotalClasses();
 
-  // Convenience function to setup a webcam
-  const flip = true; // whether to flip the webcam
+  
+  const flip = true; 
   var ratio = window.devicePixelRatio;
   var screenWidth = screen.width * ratio;
   var screenHeight = screen.height * ratio;
-  
-  let stream = await navigator.mediaDevices.getUserMedia({video: true});
-  let {width, height} = stream.getTracks()[0].getSettings();
-  console.log(`${width}x${height}`); // 640x480
   webcam = new tmImage.Webcam(screenWidth, screenHeight, flip);
-  await webcam.setup(); // request access to the webcam
-
-  // Set the webcam to full screen
-  //webcam.canvas.style.position = 'fixed';
-//   webcam.canvas.style.top = '0';
-//   webcam.canvas.style.left = '0';
-//   webcam.canvas.style.bottom = '0';
-//   webcam.canvas.style.right = '0';
-
+  await webcam.setup(); 
 
   if (isIos) {
-    document.getElementById('webcam-container').appendChild(webcam.webcam); // webcam object needs to be added in any case to make this work on iOS
-    // grab video-object in any way you want and set the attributes
+    document.getElementById('webcam-container').appendChild(webcam.webcam); 
+   
     const webCamVideo = document.getElementsByTagName('video')[0];
-    webCamVideo.setAttribute('playsinline', true); // written with "setAttribute" bc. iOS buggs otherwise
+    webCamVideo.setAttribute('playsinline', true); 
     webCamVideo.muted = 'true';
     webCamVideo.style.width = screenWidth + 'px';
     webCamVideo.style.height = screenHeight + 'px';
   } else {
     document.getElementById('webcam-container').appendChild(webcam.canvas);
   }
-  // append elements to the DOM
   labelContainer = document.getElementById('label-container');
   for (let i = 0; i < maxPredictions; i++) {
     // and class labels
@@ -89,14 +76,12 @@ async function init() {
 
 
     async function loop() {
-        webcam.update(); // update the webcam frame
+        webcam.update(); 
         await predict();
         window.requestAnimationFrame(loop);
     }
 
-    // run the webcam image through the image model
     async function predict() {
-        // predict can take in an image, video or canvas html element
         let prediction;
         if (isIos) {
             prediction = await model.predict(webcam.webcam);
@@ -131,15 +116,11 @@ async function init() {
                         else if (maxname=='Golden E-cigarette'){
                             window.location.href = "https://tirthaj.github.io/E-cigarette-Prevention/Lux_warning.html";
                         }
-                        // window.location.href = "https://tirthaj.github.io/WebAR-TT/";
                         counter = 0;
                     }
                 }
-                // else{
 
-                //     counter = 0;
-                // }
-                // console.log(classPrediction);
+
         }
     }
     function tick() {
@@ -154,3 +135,5 @@ async function init() {
     }
     tick();
 </script>
+
+<html>
